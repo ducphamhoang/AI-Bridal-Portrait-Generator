@@ -9,6 +9,63 @@ This application is a feature-rich tool that allows users to generate beautiful 
 - **AI Bridal Portrait Generation**: Transforms a user's photo into a stylized bridal portrait using Google's Gemini API.
 - **AI Face Swap**: Swaps a face from a source image onto a target image, powered by Segmind's Face Swap API.
 - **Developer API Access**: Provides clear documentation and code snippets for integrating with the underlying AI services.
+- **🆕 External API Gateway**: REST API endpoints that allow external clients to request image generation through our unified interface.
+
+## Quick Start
+
+### Frontend Application (Web UI)
+
+```bash
+npm install
+npm run dev
+```
+
+### API Server (for external clients)
+
+```bash
+npm install
+npm run server
+```
+
+The API server will be available at `http://localhost:3001`
+
+## 🔌 External API Integration
+
+The application now provides external API endpoints that allow third-party applications to generate images through our service:
+
+### Available Endpoints
+
+- **POST** `/api/generate/gemini` - Generate bridal portraits using Gemini AI
+- **POST** `/api/generate/segmind` - Perform face swaps using Segmind AI
+- **GET** `/api/docs` - Complete API documentation
+- **GET** `/health` - Health check endpoint
+
+### Quick Example
+
+```bash
+# Generate a bridal portrait
+curl -X POST \
+  http://localhost:3001/api/generate/gemini \
+  -F "userImage=@/path/to/photo.jpg"
+
+# Perform face swap (requires Segmind API key)
+curl -X POST \
+  http://localhost:3001/api/generate/segmind \
+  -H "X-Segmind-API-Key: YOUR_API_KEY" \
+  -F "sourceImage=@/path/to/source.jpg" \
+  -F "targetImage=@/path/to/target.jpg"
+```
+
+### Environment Setup for API
+
+Create a `.env` file with your API keys:
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+PORT=3001
+```
+
+📖 **For complete API documentation, see [docs/api.md](docs/api.md)**
 
 ---
 
