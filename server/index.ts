@@ -55,13 +55,12 @@ app.get('/api/docs', (req, res) => {
           targetImage: { type: 'file', required: true, description: 'The target body/background image' }
         },
         headers: {
-          'Authorization': { required: false, description: 'Bearer token for authentication (if configured)' },
-          'X-Segmind-API-Key': { required: true, description: 'Segmind API key for the service' }
+          'Authorization': { required: false, description: 'Bearer token for authentication (if configured)' }
         },
         responses: {
           200: { description: 'Success - returns face-swapped image as base64 data URL' },
           400: { description: 'Bad request - missing or invalid parameters' },
-          401: { description: 'Unauthorized - missing or invalid API key' },
+          401: { description: 'Unauthorized - missing or invalid authentication' },
           500: { description: 'Internal server error' }
         }
       }
@@ -72,7 +71,6 @@ app.get('/api/docs', (req, res) => {
   -F "userImage=@/path/to/your/photo.jpg"`,
       'curl_segmind': `curl -X POST \\
   http://localhost:3001/api/generate/segmind \\
-  -H "X-Segmind-API-Key: YOUR_SEGMIND_API_KEY" \\
   -F "sourceImage=@/path/to/source.jpg" \\
   -F "targetImage=@/path/to/target.jpg"`
     }

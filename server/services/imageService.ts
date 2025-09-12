@@ -84,9 +84,10 @@ Take the woman from the provided image and Change her pose, her clothes to weddi
 class SegmindProvider {
   private readonly apiUrl = "https://api.segmind.com/v1/faceswap-v2";
   
-  async generate(sourceImageFile: Express.Multer.File, targetImageFile: Express.Multer.File, apiKey: string): Promise<string> {
+  async generate(sourceImageFile: Express.Multer.File, targetImageFile: Express.Multer.File): Promise<string> {
+    const apiKey = process.env.SEGMIND_API_KEY;
     if (!apiKey) {
-      throw new Error("API key is not configured for the Segmind provider.");
+      throw new Error("Segmind API key is not configured. Please set SEGMIND_API_KEY environment variable.");
     }
 
     const sourceImageBase64 = fileToBase64(sourceImageFile);
@@ -155,14 +156,14 @@ const segmindProvider = new SegmindProvider();
 
 type GenerateImageOptions = 
   | { provider: 'GEMINI'; userImage: Express.Multer.File; }
-  | { provider: 'SEGMIND'; sourceImage: Express.Multer.File; targetImage: Express.Multer.File; apiKey: string };
+  | { provider: 'SEGMIND'; sourceImage: Express.Multer.File; targetImage: Express.Multer.File; };
 
 export const generateImage = (options: GenerateImageOptions): Promise<string> => {
   switch (options.provider) {
     case 'GEMINI':
       return geminiProvider.generate(options.userImage);
     case 'SEGMIND':
-      return segmindProvider.generate(options.sourceImage, options.targetImage, options.apiKey);
+      return segmindProvider.generate(options.sourceImage, options.targetImage);
     default:
       return Promise.reject(new Error('Invalid or unsupported provider selected.'));
   }

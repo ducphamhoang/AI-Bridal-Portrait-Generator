@@ -72,14 +72,10 @@ export function generateImageEndpoint(upload: any) {
         });
       }
 
-      // Get API key from header
+      // Get API key from header (this is now optional since server handles it)
       const apiKey = req.headers['x-segmind-api-key'] as string;
-      if (!apiKey) {
-        return res.status(401).json({
-          error: 'Missing API key',
-          message: 'X-Segmind-API-Key header is required'
-        });
-      }
+      
+      // Note: API key is no longer required from client, server uses environment variable
 
       // Validate file types
       if (!files.sourceImage[0].mimetype.startsWith('image/')) {
@@ -102,8 +98,7 @@ export function generateImageEndpoint(upload: any) {
       const result = await generateImage({
         provider: 'SEGMIND',
         sourceImage: files.sourceImage[0],
-        targetImage: files.targetImage[0],
-        apiKey
+        targetImage: files.targetImage[0]
       });
 
       res.status(200).json({
